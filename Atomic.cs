@@ -44,13 +44,14 @@ public sealed class Atomic<T> where T : unmanaged
             set => _atomic._value = value;
         }
 
-        public T CompareExchange(T value, T compareand)
+        public bool CompareExchange(T value, T compareand)
         {
-            var result = this.Value;
-
-            if (IsEqual(compareand)) this.Value = value;
-
-            return result;
+            if (!IsEqual(compareand))
+            {
+                this.Value = value;
+                return true;
+            }
+            return false;
         }
 
         public T Exchange(T value)
